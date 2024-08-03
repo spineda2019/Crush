@@ -41,7 +41,10 @@ impl<'b> Shell {
         let mut input: String = String::new();
 
         loop {
-            self.print_prompt()?;
+            if let Err(e) = self.print_prompt() {
+                eprintln!("Shell Error Detected: {}", e);
+                continue;
+            };
 
             /* ********************************************************************************** */
             /*                                        Read                                        */
@@ -54,7 +57,7 @@ impl<'b> Shell {
             /* ********************************************************************************** */
             /*                                        Eval                                        */
             /* ********************************************************************************** */
-            self.eval(&input);
+            self.eval(input.trim());
             input.clear();
         }
     }
