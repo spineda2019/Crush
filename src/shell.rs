@@ -33,13 +33,29 @@ impl<'b> Shell {
         Ok(())
     }
 
+    fn eval(&self, command: &str) {
+        println!("Currently in development... command: {}", command);
+    }
+
     pub fn start(&self) -> Result<(), ShellError> {
         let mut input: String = String::new();
 
         loop {
             self.print_prompt()?;
+
+            /* ********************************************************************************** */
+            /*                                        Read                                        */
+            /* ********************************************************************************** */
             let _ = stdout().flush();
-            stdin().read_line(&mut input);
+            if let Err(e) = stdin().read_line(&mut input) {
+                println!("Error reading line from stdin: {}", e);
+            }
+
+            /* ********************************************************************************** */
+            /*                                        Eval                                        */
+            /* ********************************************************************************** */
+            self.eval(&input);
+            input.clear();
         }
     }
 }
