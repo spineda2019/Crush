@@ -2,12 +2,14 @@ use std::{
     env::current_dir,
     io::{stdin, stdout, Write},
     path::PathBuf,
+    process::exit,
 };
 
 use crate::shell_error::ShellError;
 
 pub struct Shell {
     current_working_directory: PathBuf,
+    last_exit_code: isize,
 }
 
 impl<'b> Shell {
@@ -19,6 +21,7 @@ impl<'b> Shell {
 
         Ok(Self {
             current_working_directory: cwd,
+            last_exit_code: 0,
         })
     }
 
@@ -34,6 +37,10 @@ impl<'b> Shell {
     }
 
     fn eval(&self, command: &str) {
+        if command == "exit" {
+            println!("Exiting...");
+            exit(0);
+        }
         println!("Currently in development... command: {}", command);
     }
 

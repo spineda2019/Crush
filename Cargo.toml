@@ -1,7 +1,4 @@
-[package]
-name = "crush"
-version = "0.1.0"
-edition = "2021"
+[workspace]
 
-[dependencies]
-argparse = "0.2.2"
+members = ["crush", "tokenizer"]
+resolver = "2"
