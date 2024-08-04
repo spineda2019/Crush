@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
-        profile: ["", --profile=release, --profile=release-opt]
+        profile: ["", "--profile=release", "--profile=release-opt"]
 
     steps:
     - uses: actions/checkout@v4
