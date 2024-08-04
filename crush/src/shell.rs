@@ -38,14 +38,19 @@ impl<'b> Shell {
     }
 
     fn eval<'line>(&self, line: &'line str) -> Result<(), ShellError<'line>> {
-        let chunks: Vec<Chunk<'line>> = tokenizer::parse_line(line)?;
-        dbg!(&chunks);
-
         if line == "exit" {
             println!("Exiting...");
             exit(0);
         }
+
+        let chunks: Vec<Chunk<'line>> = tokenizer::parse_line(line)?;
+        dbg!(&chunks);
+
         println!("Currently in development... command: {}", line);
+
+        for chunk in chunks {
+            chunk.execute_chunk();
+        }
 
         Ok(())
     }
