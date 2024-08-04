@@ -16,11 +16,11 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
-        profile: [debug, release, release-opt]
+        profile: [, --profile=release, --profile=release-opt]
 
     steps:
     - uses: actions/checkout@v4
     - name: Build
-      run: cargo build --profile=${{ matrix.profile }} --verbose
+      run: cargo build ${{ matrix.profile }} --verbose
     - name: Run tests
-      run: cargo test --profile=${{ matrix.profile }} --verbose
+      run: cargo test ${{ matrix.profile }} --verbose
