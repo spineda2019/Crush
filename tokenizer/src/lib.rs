@@ -27,6 +27,19 @@ pub fn parse_line<'a>(line: &'a str) -> Result<Vec<Chunk<'a>>, ShellError<'a>> {
         }
     }
 
+    if !lexemes.is_empty() {
+        match lexemes.pop_front() {
+            Some(lex) => {
+                let mut chunk: Chunk<'a> = Chunk::new(lex);
+                for option in lexemes.iter() {
+                    chunk.add_option(option);
+                }
+                chunks.push(chunk);
+            }
+            None => return Err(ShellError::UnexpectedToken("")),
+        }
+    }
+
     Ok(chunks)
 }
 
