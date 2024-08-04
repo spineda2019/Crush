@@ -7,6 +7,7 @@ pub enum ShellError<'a> {
     InvalidDirectory(String),
     UnicodeError(&'a Path),
     InvalidSyntax(&'a str),
+    UnexpectedToken(&'a str),
 }
 
 impl<'a> ShellError<'a> {
@@ -19,6 +20,9 @@ impl<'a> ShellError<'a> {
                 format!("ERROR: directory \"{:?}\" is not valid unicode", err)
             }
             ShellError::InvalidSyntax(token) => {
+                format!("ERROR: Invalid Syntax at token: {}", token)
+            }
+            ShellError::UnexpectedToken(token) => {
                 format!("ERROR: Unexpected token: {}", token)
             }
         }
