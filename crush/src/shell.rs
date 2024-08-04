@@ -6,6 +6,7 @@ use std::{
 };
 
 use shell_utils::shell_error::ShellError;
+use tokenizer::chunk::Chunk;
 
 pub struct Shell {
     current_working_directory: PathBuf,
@@ -36,21 +37,26 @@ impl<'b> Shell {
         Ok(())
     }
 
-    fn eval(&self, command: &str) {
-        let chunks = tokenizer::parse_line(command);
+    fn eval<'line>(&self, line: &'line str) -> Result<(), ShellError<'line>> {
+        let chunks: Vec<Chunk<'line>> = tokenizer::parse_line(line)?;
         dbg!(&chunks);
 
-        if command == "exit" {
+        if line == "exit" {
             println!("Exiting...");
             exit(0);
         }
-        println!("Currently in development... command: {}", command);
+        println!("Currently in development... command: {}", line);
+
+        Ok(())
     }
 
-    pub fn start(&self) -> Result<(), ShellError> {
+    pub fn start(&mut self) -> Result<(), ShellError> {
         let mut input: String = String::new();
 
         loop {
+            /* ********************************************************************************** */
+            /*                                       Print                                        */
+            /* ********************************************************************************** */
             if let Err(e) = self.print_prompt() {
                 eprintln!("Shell Error Detected: {}", e);
                 continue;
@@ -67,7 +73,10 @@ impl<'b> Shell {
             /* ********************************************************************************** */
             /*                                        Eval                                        */
             /* ********************************************************************************** */
-            self.eval(input.trim());
+            if let Err(e) = self.eval(input.trim()) {
+                eprintln!("{}", e);
+                self.last_exit_code = 1;
+            }
             input.clear();
         }
     }
