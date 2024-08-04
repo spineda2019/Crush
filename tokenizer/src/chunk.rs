@@ -22,9 +22,9 @@ impl<'a> Chunk<'a> {
 
 impl<'a> Debug for Chunk<'a> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        writeln!(f, "Base Command: {}", self.command)?;
+        write!(f, "Base Command: {}", self.command)?;
         for option in &self.options {
-            writeln!(f, "Option for Command {}: {}", self.command, option)?
+            write!(f, "\n\tOption for Command {}: {}", self.command, option)?
         }
 
         Ok(())
