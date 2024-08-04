@@ -15,14 +15,12 @@ jobs:
     runs-on: '${{ matrix.os }}'
     strategy:
       matrix:
-        include:
-          - os: macos-latest
-          - os: ubuntu-latest
-          - os: windows-latest
+        os: [macos-latest, ubuntu-latest, windows-latest]
+        profile: [debug, release, release-opt]
 
     steps:
     - uses: actions/checkout@v4
     - name: Build
-      run: cargo build --verbose
+      run: cargo build --profile=${{ matrix.profile }} --verbose
     - name: Run tests
-      run: cargo test --verbose
+      run: cargo test --profile=${{ matrix.profile }} --verbose
