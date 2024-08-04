@@ -6,3 +6,4 @@ edition = "2021"
 [dependencies]
 argparse = "0.2.2"
 shell_utils = { path = "../shell_utils" }
+tokenizer = { path = "../tokenizer" }
