@@ -1,4 +1,8 @@
-use std::{fmt::Debug, process::Command};
+use std::{
+    fmt::Debug,
+    io::{self, Write},
+    process::Command,
+};
 
 use crate::token::Token;
 
@@ -26,7 +30,14 @@ impl<'a> Chunk<'a> {
         }
         let mut process = Command::new(self.command.stringify());
         process.args(args);
-        process.output();
+        let output = process.output();
+        match output {
+            Err(e) => eprintln!("Error executing {}: {}", self.command, e),
+            Ok(o) => match io::stdout().write_all(o.stdout.as_slice()) {
+                Ok(_) => {}
+                Err(e) => eprintln!("Error printing output from process: {}", e),
+            },
+        };
     }
 }
 
