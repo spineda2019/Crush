@@ -6,7 +6,7 @@ mod shell;
 fn main() -> Result<(), ShellError<'static>> {
     /* TODO(SEP): accept file as input */
 
-    let shell: Shell = Shell::new()?;
+    let mut shell: Shell = Shell::new()?;
     let _ = shell.start();
 
     Ok(())
