@@ -3,7 +3,7 @@ use std::collections::VecDeque;
 use chunk::Chunk;
 use shell_utils::shell_error::ShellError;
 
-mod chunk;
+pub mod chunk;
 mod token;
 
 pub fn parse_line<'a>(line: &'a str) -> Result<Vec<Chunk<'a>>, ShellError<'a>> {
@@ -41,10 +41,6 @@ pub fn parse_line<'a>(line: &'a str) -> Result<Vec<Chunk<'a>>, ShellError<'a>> {
     }
 
     Ok(chunks)
-}
-
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
 }
 
 #[cfg(test)]
