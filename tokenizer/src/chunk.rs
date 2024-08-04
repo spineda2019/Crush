@@ -1,4 +1,4 @@
-use std::fmt::Debug;
+use std::{fmt::Debug, process::Command};
 
 use crate::token::Token;
 
@@ -17,6 +17,16 @@ impl<'a> Chunk<'a> {
 
     pub fn add_option(&mut self, option: &'a str) {
         self.options.push(Token::CommandOption(option));
+    }
+
+    pub fn execute_chunk(&self) {
+        let mut args: Vec<&str> = Vec::with_capacity(self.options.len());
+        for arg in self.options.iter() {
+            args.push(arg.stringify());
+        }
+        let mut process = Command::new(self.command.stringify());
+        process.args(args);
+        process.output();
     }
 }
 
