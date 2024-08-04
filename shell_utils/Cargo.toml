@@ -1,7 +1,6 @@
 [package]
-name = "tokenizer"
+name = "shell_utils"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-shell_utils = { path = "../shell_utils" }

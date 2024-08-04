@@ -5,7 +5,7 @@ use std::{
     process::exit,
 };
 
-use crate::shell_error::ShellError;
+use shell_utils::shell_error::ShellError;
 
 pub struct Shell {
     current_working_directory: PathBuf,
@@ -16,7 +16,7 @@ impl<'b> Shell {
     pub fn new() -> Result<Self, ShellError<'b>> {
         let cwd: PathBuf = match current_dir() {
             Ok(dir) => dir,
-            Err(_) => return Err(ShellError::directory_error(".".to_string())),
+            Err(_) => return Err(ShellError::InvalidSyntax(".")),
         };
 
         Ok(Self {
@@ -28,7 +28,7 @@ impl<'b> Shell {
     fn print_prompt(&self) -> Result<(), ShellError> {
         let cwd: &str = match self.current_working_directory.to_str() {
             Some(c) => c,
-            None => return Err(ShellError::unicode_error(&self.current_working_directory)),
+            None => return Err(ShellError::UnicodeError(&self.current_working_directory)),
         };
 
         print!("{} >> ", cwd);
