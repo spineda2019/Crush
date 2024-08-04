@@ -49,7 +49,10 @@ impl<'b> Shell {
         println!("Currently in development... command: {}", line);
 
         for chunk in chunks {
-            chunk.execute_chunk();
+            if chunk.execute_chunk().is_err() {
+                eprintln!("Aborting");
+                return Err(ShellError::ProcessError(String::new()));
+            }
         }
 
         Ok(())

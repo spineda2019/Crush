@@ -4,6 +4,8 @@ use std::{
     process::Command,
 };
 
+use shell_utils::shell_error::ShellError;
+
 use crate::token::Token;
 
 pub struct Chunk<'a> {
@@ -23,7 +25,7 @@ impl<'a> Chunk<'a> {
         self.options.push(Token::CommandOption(option));
     }
 
-    pub fn execute_chunk(&self) {
+    pub fn execute_chunk(&self) -> Result<(), ShellError> {
         let mut args: Vec<&str> = Vec::with_capacity(self.options.len());
         for arg in self.options.iter() {
             args.push(arg.stringify());
@@ -32,12 +34,20 @@ impl<'a> Chunk<'a> {
         process.args(args);
         let output = process.output();
         match output {
-            Err(e) => eprintln!("Error executing {}: {}", self.command, e),
+            Err(e) => {
+                eprintln!("Error executing {}: {}", self.command, e);
+                return Err(ShellError::ProcessError(e.to_string()));
+            }
             Ok(o) => match io::stdout().write_all(o.stdout.as_slice()) {
                 Ok(_) => {}
-                Err(e) => eprintln!("Error printing output from process: {}", e),
+                Err(e) => {
+                    eprintln!("Error printing output from process: {}", e);
+                    return Err(ShellError::ProcessError(e.to_string()));
+                }
             },
         };
+
+        Ok(())
     }
 }
 
@@ -49,5 +59,17 @@ impl<'a> Debug for Chunk<'a> {
         }
 
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod chunk_tests {
+    use super::Chunk;
+
+    #[test]
+    fn test_chunk_execution() {
+        let mut echo = Chunk::new("echo");
+        echo.add_option("test");
+        assert!(echo.execute_chunk().is_ok());
     }
 }

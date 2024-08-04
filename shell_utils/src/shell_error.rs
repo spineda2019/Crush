@@ -8,6 +8,7 @@ pub enum ShellError<'a> {
     UnicodeError(&'a Path),
     InvalidSyntax(&'a str),
     UnexpectedToken(&'a str),
+    ProcessError(String),
 }
 
 impl<'a> ShellError<'a> {
@@ -24,6 +25,9 @@ impl<'a> ShellError<'a> {
             }
             ShellError::UnexpectedToken(token) => {
                 format!("ERROR: Unexpected token: {}", token)
+            }
+            ShellError::ProcessError(process) => {
+                format!("ERROR: Error ocurred while executing process: {}", process)
             }
         }
     }
