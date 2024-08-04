@@ -37,6 +37,9 @@ impl<'b> Shell {
     }
 
     fn eval(&self, command: &str) {
+        let chunks = tokenizer::parse_line(command);
+        dbg!(&chunks);
+
         if command == "exit" {
             println!("Exiting...");
             exit(0);
