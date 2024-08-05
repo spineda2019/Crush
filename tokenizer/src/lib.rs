@@ -15,7 +15,7 @@ pub fn parse_line<'a>(line: &'a str) -> Result<Vec<Chunk<'a>>, ShellError<'a>> {
             match lexemes.pop_front() {
                 Some(lex) => {
                     let mut chunk: Chunk<'a> = Chunk::new(lex);
-                    for option in lexemes.iter() {
+                    while let Some(option) = lexemes.pop_front() {
                         chunk.add_option(option);
                     }
                     chunks.push(chunk);
