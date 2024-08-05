@@ -14,10 +14,18 @@ pub struct Chunk<'a> {
 }
 
 impl<'a> Chunk<'a> {
+    const BUILTINS: [&'a str; 1] = ["cd"];
     pub fn new(root_command: &'a str) -> Chunk<'a> {
-        Chunk {
-            command: Token::Command(root_command),
-            options: Vec::new(),
+        if Self::BUILTINS.contains(&root_command) {
+            Chunk {
+                command: Token::LanguageBuiltin(root_command),
+                options: Vec::new(),
+            }
+        } else {
+            Chunk {
+                command: Token::Command(root_command),
+                options: Vec::new(),
+            }
         }
     }
 

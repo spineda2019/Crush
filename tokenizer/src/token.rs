@@ -5,6 +5,7 @@ pub enum Token<'a> {
     Redirection(&'a str),
     Combination(&'a str),
     CommandOption(&'a str),
+    LanguageBuiltin(&'a str),
 }
 
 impl<'a> Token<'a> {
@@ -14,6 +15,7 @@ impl<'a> Token<'a> {
             Token::Redirection(x) => x,
             Token::Combination(x) => x,
             Token::CommandOption(x) => x,
+            Token::LanguageBuiltin(x) => x,
         }
     }
 }
